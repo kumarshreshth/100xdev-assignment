@@ -1,5 +1,6 @@
 import fs from "fs";
 import { Command } from "commander";
+import chalk from "chalk";
 
 const program = new Command();
 
@@ -13,7 +14,7 @@ function readFile(filePath) {
     const fileContent = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(fileContent);
   } catch (error) {
-    console.log("Cannot read the file ", error);
+    console.log(chalk.red("Cannot read the file ", error));
     return [];
   }
 }
@@ -22,12 +23,15 @@ function writeFile(filePath, data, option) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
     if (option == "add")
-      console.log("Data has been added successfully in the file");
+      console.log(chalk.green("Data has been added successfully in the file"));
     if (option == "delete")
-      console.log("Data has been deleted successfully from the file");
-    if (option == "update") console.log("Data has been successfully updated");
+      console.log(
+        chalk.green("Data has been deleted successfully from the file")
+      );
+    if (option == "update")
+      console.log(chalk.green("Data has been successfully updated"));
   } catch (error) {
-    console.log("Cannot write in the file ", error);
+    console.log(chalk.red("Cannot write in the file ", error));
   }
 }
 
@@ -38,7 +42,9 @@ program
   .action((taskName) => {
     if (taskName.trim() == "") {
       console.log(
-        "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        chalk.red(
+          "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        )
       );
       return;
     }
@@ -64,7 +70,9 @@ program
   .action((taskName) => {
     if (taskName.trim() == "") {
       console.log(
-        "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        chalk.red(
+          "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        )
       );
       return;
     }
@@ -78,7 +86,7 @@ program
       jsonData.splice(index, 1);
       writeFile(file, jsonData, selectedCommand);
     } else {
-      console.log("Entered data doesnot exist in the list");
+      console.log(chalk.yellow("Entered data doesnot exist in the list"));
     }
   });
 
@@ -95,7 +103,9 @@ program
   .action((taskName, taskNameUpdated) => {
     if (taskName.trim() == "" || taskNameUpdated.trim() == "") {
       console.log(
-        "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        chalk.red(
+          "Error: cannot take empty argument for more information use command- node todocli.js -h"
+        )
       );
       return;
     }
@@ -110,7 +120,9 @@ program
       writeFile(file, jsonData, selectedCommand);
     } else {
       console.log(
-        "Entered task is not present in list so it cannot be updated"
+        chalk.yellow(
+          "Entered task is not present in list so it cannot be updated"
+        )
       );
     }
   });
